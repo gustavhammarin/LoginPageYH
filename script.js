@@ -25,13 +25,21 @@ loginForm.appendChild(loginButton)
 let isLoginModal = true
 
 //EVENTLISTENERS
-loginButton.addEventListener("submit", (e) => {
+loginForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
     const data = new FormData(loginForm)
 
     let username = data.get("username")
     let password = data.get("password")
+
+    let validation = validateCredentials(username, password)
+
+    if (validation === false){
+        console.log("validation problem")
+    } else {
+        root.removeChild(loginForm)
+    }
 
     console.log(username)
     console.log(password)
@@ -50,6 +58,17 @@ const isLoginModalOpen = () => {
   }
 
   console.log("modal is open")
+}
+const validateCredentials = (username, password) => {
+    if (username.length <= 6 || username === ""){
+        console.log("error username is less than 6 chars long")
+        return false;
+    }
+    if (password.length <= 6 || password === ""){
+        console.log("error username is less than 6 chars long")
+        return false;
+    }
+    return true;
 }
 
 isLoginModalOpen()
