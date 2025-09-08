@@ -6,8 +6,12 @@ let state = {
   loggedIn: !!localStorage.getItem("username"),
   username: localStorage.getItem("username") || null,
 };
-console.log(state.loggedIn);
-console.log(state.username);
+
+const credentials = {
+  username: "test",
+  password: "1234",
+};
+
 //EVENTLISTENERS
 
 //FUNCTIONS
@@ -15,21 +19,31 @@ const OpenLoginForm = () => {
   const loginForm = document.createElement("form");
   loginForm.classList.add("login-form");
 
+    const heading = document.createElement("h1")
+    heading.textContent = "Login"
+
   const usernameInput = document.createElement("input");
   usernameInput.name = "username";
   usernameInput.placeholder = "username";
   usernameInput.type = "text";
+  const usernameLabel = document.createElement("label")
+  usernameLabel.id = "username-label"
 
   const passwordInput = document.createElement("input");
   passwordInput.name = "password";
   passwordInput.placeholder = "password";
   passwordInput.type = "password";
+  const passwordLabel = document.createElement("label")
+  passwordLabel.id = "password-label"
 
   const loginButton = document.createElement("button");
   loginButton.textContent = "Login";
   loginButton.type = "submit";
 
+  loginForm.appendChild(heading)
+  loginForm.appendChild(usernameLabel)
   loginForm.appendChild(usernameInput);
+  loginForm.appendChild(passwordLabel)
   loginForm.appendChild(passwordInput);
   loginForm.appendChild(loginButton);
 
@@ -44,18 +58,15 @@ const OpenLoginForm = () => {
     let username = data.get("username");
     let password = data.get("password");
 
-    let validation = validateCredentials(username, password);
+    let errors = validateCredentials(username, password);
 
-    if (!validation) {
-      console.log("validation problem");
-    } else {
+    if (errors.length === 0) {
       saveUsernameToLocalStorage(username);
       state.loggedIn = true;
       render();
+    } else {
+        showErrorToast(errors)
     }
-
-    console.log(username);
-    console.log(password);
   });
 };
 const closeLoginForm = () => {
@@ -89,16 +100,32 @@ const closeWelcomePage = () => {
   if (home) root.removeChild(home);
 };
 const validateCredentials = (username, password) => {
-  if (username.length <= 6 || username === "") {
-    console.log("error username is less than 6 chars long");
-    return false;
+  let errors = [];
+  if (username != credentials.username) {
+    let error = {
+        usernameError: "Incorrect username"
+    };
+    errors.push(error);
   }
-  if (password.length <= 6 || password === "") {
-    console.log("error username is less than 6 chars long");
-    return false;
+  if (password != credentials.password) {
+    let error = {
+        passwordError: "Incorrect password"
+    }
+    errors.push(error);
   }
-  return true;
+  console.log(errors)
+  return errors;
 };
+const showErrorToast = (errors) => {
+    let usernameError = errors.find(err => err.usernameError)?.usernameError
+    let passwordError = errors.find(err => err.passwordError)?.passwordError
+
+
+    let usernameLabel = document.getElementById("username-label")
+    usernameLabel.textContent = usernameError
+    let passwordLabel = document.getElementById("password-label")
+    passwordLabel.textContent = passwordError
+}
 const saveUsernameToLocalStorage = (username) => {
   if (state.username === null) {
     localStorage.setItem("username", username);

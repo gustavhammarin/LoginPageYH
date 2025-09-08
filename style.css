@@ -10,14 +10,34 @@ body{
 }
 
 .login-form{
-    background-color: green;
+    background-color: rgb(138, 206, 138);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 50%;
-    height: 200px;
+    width: 350px;
+    height: 250px;
     margin-top: 20%;
-    gap: 12px;
     border-radius: 12px;
+}
+.login-form > input {
+    border-radius: 6px;
+    border: none;
+    padding: 5px;
+}
+.login-form > button {
+    padding: 5px;
+    width: 60px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 12px;
+}
+.login-form > label {
+    font-size: small;
+    padding: 5px;
+    color: rgb(227, 84, 84);
+}
+
+.login-form > h1{
+    margin-bottom: 5px;
 }
