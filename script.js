@@ -2,25 +2,16 @@
 const root = document.getElementById("root");
 
 //GLOBAL VARIABLES
-
+let state = {
+  loggedIn: !!localStorage.getItem("username"),
+  username: localStorage.getItem("username") || null,
+};
+console.log(state.loggedIn);
+console.log(state.username);
 //EVENTLISTENERS
 
 //FUNCTIONS
-const isUserLoggedIn = () => {
-  let username = localStorage.getItem("username");
-  console.log(username);
-  if (username) {
-    return true;
-  }
-  return false;
-};
-
-const LogOut = () => {
-  localStorage.removeItem("username");
-};
 const OpenLoginForm = () => {
-  if (isUserLoggedIn()) return;
-
   const loginForm = document.createElement("form");
   loginForm.classList.add("login-form");
 
@@ -44,6 +35,7 @@ const OpenLoginForm = () => {
 
   root.appendChild(loginForm);
 
+  //EVENTLISTENER
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -58,7 +50,8 @@ const OpenLoginForm = () => {
       console.log("validation problem");
     } else {
       saveUsernameToLocalStorage(username);
-      closeLoginForm()
+      state.loggedIn = true;
+      render();
     }
 
     console.log(username);
@@ -70,20 +63,31 @@ const closeLoginForm = () => {
   if (form) root.removeChild(form);
 };
 const OpenWelcomePage = () => {
-    if (!isUserLoggedIn()) return;
+  const homeContainer = document.createElement("div");
+  homeContainer.classList.add("home-container");
 
-    const homeContainer = document.createElement("div");
-    homeContainer.classList.add("home-container");
+  const welcomeText = document.createElement("h1");
+  welcomeText.textContent = "Welcome";
 
-    const welcomeText = document.createElement("h1")
-    welcomeText.textContent = "Welcome"
+  const logoutButton = document.createElement("button");
+  logoutButton.textContent = "Logout";
 
-    const logoutButton = document.createElement("button")
-    logoutButton.textContent = "Logout"
+  homeContainer.appendChild(welcomeText);
+  homeContainer.appendChild(logoutButton);
 
-    homeContainer.appendChild(welcomeText)
-    homeContainer.appendChild(logoutButton)
-}
+  root.appendChild(homeContainer);
+
+  logoutButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    clearLocalstorage();
+    state.loggedIn = false;
+    render();
+  });
+};
+const closeWelcomePage = () => {
+  const home = document.querySelector(".home-container");
+  if (home) root.removeChild(home);
+};
 const validateCredentials = (username, password) => {
   if (username.length <= 6 || username === "") {
     console.log("error username is less than 6 chars long");
@@ -96,10 +100,23 @@ const validateCredentials = (username, password) => {
   return true;
 };
 const saveUsernameToLocalStorage = (username) => {
-  localStorage.setItem("username", username);
+  if (state.username === null) {
+    localStorage.setItem("username", username);
+  }
 };
+const clearLocalstorage = () => {
+  if (state.username != null) {
+    localStorage.removeItem("username");
+  }
+};
+const render = () => {
+  closeLoginForm();
+  closeWelcomePage();
 
-const renderPage = () => {
-  OpenLoginForm();
+  if (!state.loggedIn) {
+    OpenLoginForm();
+  } else {
+    OpenWelcomePage();
+  }
 };
-renderPage();
+render();
