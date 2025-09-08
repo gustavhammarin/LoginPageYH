@@ -21,8 +21,10 @@ loginButton.type = "submit"
 loginForm.appendChild(usernameInput)
 loginForm.appendChild(passwordInput)
 loginForm.appendChild(loginButton)
+
 //GLOBAL VARIABLES
 let isLoginModal = true
+console.log(isLoginModal)
 
 //EVENTLISTENERS
 loginForm.addEventListener("submit", (e) => {
@@ -35,10 +37,11 @@ loginForm.addEventListener("submit", (e) => {
 
     let validation = validateCredentials(username, password)
 
-    if (validation === false){
+    if (!validation){
         console.log("validation problem")
     } else {
-        root.removeChild(loginForm)
+        saveUsernameToLocalStorage(username)
+        isUserLoggedIn()
     }
 
     console.log(username)
@@ -46,7 +49,15 @@ loginForm.addEventListener("submit", (e) => {
 })
 
 //FUNCTIONS
-const isUserLoggedIn = () => {}
+const isUserLoggedIn = () => {
+    let username = localStorage.getItem("username");
+    console.log(username)
+    if (username) {
+        isLoginModal = false
+    } else {
+        isLoginModal = true
+    }
+}
 
 const Login = () => {}
 
@@ -56,8 +67,7 @@ const isLoginModalOpen = () => {
   if (isLoginModal) {
     root.appendChild(loginForm)
   }
-
-  console.log("modal is open")
+  console.log(isLoginModal)
 }
 const validateCredentials = (username, password) => {
     if (username.length <= 6 || username === ""){
@@ -70,8 +80,13 @@ const validateCredentials = (username, password) => {
     }
     return true;
 }
-
+const saveUsernameToLocalStorage = (username) => {
+    localStorage.setItem("username", username);
+}
+isUserLoggedIn()
 isLoginModalOpen()
+
+
 
 
 
