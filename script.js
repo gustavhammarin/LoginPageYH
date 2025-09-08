@@ -3,8 +3,7 @@ const root = document.getElementById("root");
 
 //GLOBAL VARIABLES
 let state = {
-  loggedIn: !!localStorage.getItem("username"),
-  username: localStorage.getItem("username") || null,
+  loggedIn: !!localStorage.getItem("username")
 };
 
 const credentials = {
@@ -26,24 +25,21 @@ const OpenLoginForm = () => {
   usernameInput.name = "username";
   usernameInput.placeholder = "username";
   usernameInput.type = "text";
-  const usernameLabel = document.createElement("label")
-  usernameLabel.id = "username-label"
+  const errorLabel = document.createElement("label")
+  errorLabel.id = "error-label"
 
   const passwordInput = document.createElement("input");
   passwordInput.name = "password";
   passwordInput.placeholder = "password";
   passwordInput.type = "password";
-  const passwordLabel = document.createElement("label")
-  passwordLabel.id = "password-label"
 
   const loginButton = document.createElement("button");
   loginButton.textContent = "Login";
   loginButton.type = "submit";
 
   loginForm.appendChild(heading)
-  loginForm.appendChild(usernameLabel)
+  loginForm.appendChild(errorLabel)
   loginForm.appendChild(usernameInput);
-  loginForm.appendChild(passwordLabel)
   loginForm.appendChild(passwordInput);
   loginForm.appendChild(loginButton);
 
@@ -58,14 +54,14 @@ const OpenLoginForm = () => {
     let username = data.get("username");
     let password = data.get("password");
 
-    let errors = validateCredentials(username, password);
+    let error = validateCredentials(username, password);
 
-    if (errors.length === 0) {
+    if (!error) {
       saveUsernameToLocalStorage(username);
       state.loggedIn = true;
       render();
     } else {
-        showErrorToast(errors)
+        showErrorToast(error)
     }
   });
 };
@@ -100,41 +96,20 @@ const closeWelcomePage = () => {
   if (home) root.removeChild(home);
 };
 const validateCredentials = (username, password) => {
-  let errors = [];
-  if (username != credentials.username) {
-    let error = {
-        usernameError: "Incorrect username"
-    };
-    errors.push(error);
-  }
-  if (password != credentials.password) {
-    let error = {
-        passwordError: "Incorrect password"
+    let error = "Incorrect username or password"
+    if (username != credentials.username || password != credentials.password){
+        return error
     }
-    errors.push(error);
-  }
-  console.log(errors)
-  return errors;
 };
-const showErrorToast = (errors) => {
-    let usernameError = errors.find(err => err.usernameError)?.usernameError
-    let passwordError = errors.find(err => err.passwordError)?.passwordError
-
-
-    let usernameLabel = document.getElementById("username-label")
-    usernameLabel.textContent = usernameError
-    let passwordLabel = document.getElementById("password-label")
-    passwordLabel.textContent = passwordError
+const showErrorToast = (error) => {
+    let errorLabel = document.getElementById("error-label")
+    errorLabel.textContent = error
 }
 const saveUsernameToLocalStorage = (username) => {
-  if (state.username === null) {
     localStorage.setItem("username", username);
-  }
 };
 const clearLocalstorage = () => {
-  if (state.username != null) {
     localStorage.removeItem("username");
-  }
 };
 const render = () => {
   closeLoginForm();
