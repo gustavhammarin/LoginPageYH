@@ -11,7 +11,7 @@ usernameInput.type = "text"
 
 const passwordInput = document.createElement("input")
 passwordInput.name = "password"
-passwordInput.placeholder = "username"
+passwordInput.placeholder = "password"
 passwordInput.type = "password"
 
 const loginButton = document.createElement("button")
@@ -25,6 +25,17 @@ loginForm.appendChild(loginButton)
 let isLoginModal = true
 
 //EVENTLISTENERS
+loginButton.addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const data = new FormData(loginForm)
+
+    let username = data.get("username")
+    let password = data.get("password")
+
+    console.log(username)
+    console.log(password)
+})
 
 //FUNCTIONS
 const isUserLoggedIn = () => {}
@@ -42,3 +53,6 @@ const isLoginModalOpen = () => {
 }
 
 isLoginModalOpen()
+
+
+
