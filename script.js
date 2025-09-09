@@ -11,10 +11,8 @@ const credentials = {
   password: "1234",
 };
 
-//EVENTLISTENERS
-
 //FUNCTIONS
-const OpenLoginForm = () => {
+function OpenLoginForm () {
   const loginForm = document.createElement("form");
   loginForm.classList.add("login-form");
 
@@ -65,11 +63,11 @@ const OpenLoginForm = () => {
     }
   });
 };
-const closeLoginForm = () => {
+function closeLoginForm () {
   const form = document.querySelector(".login-form");
   if (form) root.removeChild(form);
 };
-const OpenWelcomePage = () => {
+function OpenWelcomePage () {
   const homeContainer = document.createElement("div");
   homeContainer.classList.add("home-container");
 
@@ -91,27 +89,27 @@ const OpenWelcomePage = () => {
     render();
   });
 };
-const closeWelcomePage = () => {
+function closeWelcomePage () {
   const home = document.querySelector(".home-container");
   if (home) root.removeChild(home);
 };
-const validateCredentials = (username, password) => {
+function validateCredentials (username, password) {
     let error = "Incorrect username or password"
     if (username != credentials.username || password != credentials.password){
         return error
     }
 };
-const showErrorToast = (error) => {
+function showErrorToast (error) {
     let errorLabel = document.getElementById("error-label")
     errorLabel.textContent = error
 }
-const saveUsernameToLocalStorage = (username) => {
+function saveUsernameToLocalStorage (username) {
     localStorage.setItem("username", username);
 };
-const clearLocalstorage = () => {
+function clearLocalstorage () {
     localStorage.removeItem("username");
 };
-const render = () => {
+function render () {
   closeLoginForm();
   closeWelcomePage();
 
