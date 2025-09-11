@@ -84,6 +84,7 @@ function OpenWelcomePage () {
 
   root.appendChild(homeContainer);
 
+  //EVENTLISTENER
   logoutButton.addEventListener("click", () => {
     clearLocalstorage();
     state.loggedIn = false;
