@@ -2,7 +2,7 @@
 const root = document.getElementById("root");
 
 //GLOBAL VARIABLES
-let state = {
+const state = {
   loggedIn: !!localStorage.getItem("username")
 };
 
@@ -11,13 +11,15 @@ const credentials = {
   password: "1234",
 };
 
+render();
+
 //FUNCTIONS
 function OpenLoginForm () {
   const loginForm = document.createElement("form");
   loginForm.classList.add("login-form");
 
-    const heading = document.createElement("h1")
-    heading.textContent = "Login"
+  const heading = document.createElement("h1")
+  heading.textContent = "Login"
 
   const usernameInput = document.createElement("input");
   usernameInput.name = "username";
@@ -49,10 +51,10 @@ function OpenLoginForm () {
 
     const data = new FormData(loginForm);
 
-    let username = data.get("username");
-    let password = data.get("password");
+    const username = data.get("username");
+    const password = data.get("password");
 
-    let error = validateCredentials(username, password);
+    const error = validateCredentials(username, password);
 
     if (!error) {
       saveUsernameToLocalStorage(username);
@@ -82,8 +84,7 @@ function OpenWelcomePage () {
 
   root.appendChild(homeContainer);
 
-  logoutButton.addEventListener("click", (e) => {
-    e.preventDefault();
+  logoutButton.addEventListener("click", () => {
     clearLocalstorage();
     state.loggedIn = false;
     render();
@@ -94,13 +95,13 @@ function closeWelcomePage () {
   if (home) root.removeChild(home);
 };
 function validateCredentials (username, password) {
-    let error = "Incorrect username or password"
+    const error = "Incorrect username or password"
     if (username != credentials.username || password != credentials.password){
         return error
     }
 };
 function showErrorToast (error) {
-    let errorLabel = document.getElementById("error-label")
+    const errorLabel = document.getElementById("error-label")
     errorLabel.textContent = error
 }
 function saveUsernameToLocalStorage (username) {
@@ -119,4 +120,4 @@ function render () {
     OpenWelcomePage();
   }
 };
-render();
+
